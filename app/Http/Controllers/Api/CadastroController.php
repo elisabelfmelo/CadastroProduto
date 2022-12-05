@@ -10,25 +10,22 @@ use App\Http\Requests\CadastroRequest;
 class CadastroController extends Controller
 {
     private $cadastro;
-    public function __construct(Imovel $imovel)
+    public function __construct(Cadastro $cadastro)
     {
-        $this->imovel = $imovel;
+        $this->cadastro = $cadastro;
     }
     public function index()
     {
-        $imovel = $this->imovel->paginate('10');
-        return response()->json($imovel, 200);
+        $cadastro = $this->cadastro->paginate('10');
+        return response()->json($cadastro, 200);
     }
 
     public function show($id)
     {
         try {
-            $imovel = $this->imovel->findOrFail($id);
+            $cadastro = $this->cadas->findOrFail($id);
             return response()->json([
-                'data' => [
-                    $imovel
-                ]
-            ], 200);
+                'data' => [$cadastro]], 200);
         } catch (\Exception $e) {
             return response()->json(['Erro' => $e->getMessage()], 401);
         }
@@ -38,10 +35,10 @@ class CadastroController extends Controller
     {
         $data = $request->all();
         try {
-            $imovel = $this->imovel->create($data);
+            $cadastro = $this->cadastro->create($data);
             return response()->json([
                 'data' => [
-                    'msg' => 'Imovel cadastrado com sucesso'
+                    'msg' => 'Produto cadastrado com sucesso'
                 ]
             ], 200);
         } catch (\Exception $e) {
@@ -53,11 +50,11 @@ class CadastroController extends Controller
     {
         $data = $request->all();
         try {
-            $imovel = $this->imovel->findOrFail($id); #se tiver exceção ja testa
-            $imovel->update($data);
+            $cadastro = $this->cadastro->findOrFail($id); 
+            $cadastro->update($data);
             return response()->json([
                 'data' => [
-                    'msg' => 'Imovel Atualizado com sucesso'
+                    'msg' => 'Produto Atualizado com sucesso'
                 ]
             ], 200);
         } catch (\Exception $e) {
@@ -68,13 +65,10 @@ class CadastroController extends Controller
     public function destroy($id)
     {
         try {
-            $imovel = $this->imovel->findOrFail($id); #se tiver exceção ja testa
-            $imovel->delete();
+            $cadastro = $this->cadastro->findOrFail($id);
+            $cadastro->delete();
             return response()->json([
-                'data' => [
-                    'msg' => 'Imovel excluido com sucesso'
-                ]
-            ], 200);
+                'data' => ['msg' => 'Produto excluido com sucesso']], 200);
         } catch (\Exception $e) {
             return response()->json(['Erro' => $e->getMessage()], 401);
         }
